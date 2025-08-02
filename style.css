@@ -1,0 +1,234 @@
+/* General Body Styles */
+body {
+    font-family: 'Prompt', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a; /* Dark background color */
+    color: #f0f0f0; /* Light text color for contrast */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Main content area */
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+    flex-grow: 1; /* Allow main content to grow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Container for screens (home, select quiz, quiz, result) */
+.container {
+    background-color: #2c2c2c; /* Slightly lighter dark background for containers */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow */
+    max-width: 90%; /* Responsive width */
+    width: 500px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Space between elements */
+}
+
+/* Headings */
+h1, h2 {
+    color: #e0e0e0; /* Light color for headings */
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+/* Paragraphs */
+p {
+    color: #cccccc; /* Slightly darker light color for paragraphs */
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+    background-color: #007bff; /* Blue for primary actions */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 300px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Option buttons specific styling */
+.option-button {
+    background-color: #444444; /* Darker gray for options */
+    color: #f0f0f0;
+    border: 1px solid #555555;
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 400px; /* Wider for options */
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.option-button:hover {
+    background-color: #555555;
+    border-color: #777777;
+}
+
+.option-button.correct {
+    background-color: #28a745; /* Green for correct answer */
+    border-color: #28a745;
+    color: white;
+}
+
+.option-button.wrong {
+    background-color: #dc3545; /* Red for wrong answer */
+    border-color: #dc3545;
+    color: white;
+}
+
+/* Feedback container */
+#feedbackContainer {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #3a3a3a; /* Slightly lighter dark for feedback */
+    border: 1px solid #555555;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+}
+
+#feedbackText {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.correct-feedback {
+    color: #28a745;
+}
+
+.wrong-feedback {
+    color: #dc3545;
+}
+
+#explanationText {
+    color: #cccccc;
+    font-size: 0.95em;
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #333; /* Darker gray for sidebar */
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+}
+
+.sidebar a {
+    padding: 15px 8px 15px 32px;
+    text-decoration: none;
+    font-size: 1.2em;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+    background-color: #555;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #555;
+    margin-bottom: 20px;
+}
+
+.sidebar-header i {
+    font-size: 3em;
+    color: #007bff; /* Blue icon */
+    margin-bottom: 10px;
+}
+
+.sidebar-header h3 {
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* Hamburger icon */
+.openbtn {
+    font-size: 30px;
+    cursor: pointer;
+    background-color: transparent;
+    color: #007bff; /* Blue hamburger icon */
+    padding: 10px 15px;
+    border: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.openbtn:hover {
+    background-color: #333;
+}
+
+/* Responsive adjustments */
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 0; /* Hidden by default on small screens */
+    }
+    #main {
+        margin-left: 0;
+    }
+    .openbtn {
+        display: block; /* Always show hamburger on small screens */
+    }
+}

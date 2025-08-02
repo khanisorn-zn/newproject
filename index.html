@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แอปข้อสอบภาค ข. ก.พ.</title>
+    <!-- เพิ่มฟอนต์ Prompt จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- โค้ด Google AdSense (หากต้องการ) - วางไว้ที่นี่ -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+    <!-- Sidebar (แถบด้านข้าง) -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn">&times;</a>
+        <div class="sidebar-header">
+            <i class="fas fa-user-circle"></i>
+            <h3>ผู้ใช้งาน</h3>
+        </div>
+        <!-- ลบลิงก์ "เข้าสู่ระบบ" ออก -->
+        <!-- <a href="#" id="sidebarLoginBtn"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</a> -->
+        <a href="#" id="sidebarSelectQuizBtn"><i class="fas fa-book"></i> เลือก พ.ร.บ.</a>
+        <a href="#"><i class="fas fa-question-circle"></i> เกี่ยวกับแอป</a>
+        <a href="#" id="sidebarLogoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+    </div>
+
+    <!-- Main Content (เนื้อหาหลักของแอป) -->
+    <div id="main">
+        <!-- ปุ่ม Hamburger icon สำหรับเปิด Sidebar -->
+        <span class="openbtn">&#9776;</span>
+
+        <div class="container" id="homeScreen">
+            <h1>แอปข้อสอบภาค ข. ก.พ.</h1>
+            <p>เตรียมสอบภาค ข. ให้พร้อม แล้วพิชิตความสำเร็จไปด้วยกัน!</p>
+            <button id="startButton">เริ่มทำข้อสอบ</button>
+        </div>
+
+        <!-- หน้าจอใหม่: สำหรับเลือก พ.ร.บ. -->
+        <div class="container" id="selectQuizScreen" style="display: none;">
+            <h2>เลือกพระราชบัญญัติที่ต้องการ</h2>
+            <p>คลิกเพื่อเลือกชุดข้อสอบ</p>
+            <button id="selectCivilServantActBtn">พ.ร.บ. ระเบียบข้าราชการพลเรือน พ.ศ. 2551</button>
+            <button id="selectPdpaActBtn">พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</button>
+            <button id="selectMoeActBtn">พ.ร.บ. ระเบียบบริหารราชการกระทรวงศึกษาธิการ (รวม 3 ฉบับ)</button>
+            <button id="selectGoodGovernanceActBtn">พ.ร.ฎ. หลักเกณฑ์และวิธีการบริหารกิจการบ้านเมืองที่ดี (รวม 2 ฉบับ)</button>
+            <button id="selectTortLiabilityActBtn">พ.ร.บ. ความรับผิดทางละเมิดของเจ้าหน้าที่ พ.ศ. 2539</button>
+            <button id="selectAdminOrgActBtn">พ.ร.บ. ระเบียบบริหารราชการแผ่นดิน พ.ศ. 2534</button>
+            <button id="selectLeaveRegulationsBtn">ระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ พ.ศ. 2555</button> <!-- ปุ่มใหม่สำหรับ Leave Regulations -->
+        </div>
+
+        <div class="container" id="quizScreen" style="display: none;">
+            <h2 id="questionText"></h2>
+            <div id="optionsContainer">
+                <!-- ตัวเลือกจะถูกสร้างด้วย JavaScript -->
+            </div>
+            <div id="feedbackContainer" style="display: none;">
+                <p id="feedbackText"></p>
+                <p id="explanationText"></p>
+            </div>
+            <button id="nextButton" style="display: none;">ข้อต่อไป</button> 
+        </div>
+
+        <div class="container" id="resultScreen" style="display: none;">
+            <h2>ผลการทำข้อสอบ</h2>
+            <p id="scoreDisplay"></p>
+            <button id="restartButton">ทำข้อสอบอีกครั้ง</button>
+        </div>
+    </div>
+
+    <!-- เปลี่ยน type ของ script เป็น "module" เพื่อรองรับ import/export -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
