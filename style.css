@@ -525,6 +525,27 @@ body.dark-theme .question-counter-fixed {
 }
 
 
+/* ปุ่มรีเซ็ตข้อสอบที่ย้ายมาอยู่มุมขวาล่าง */
+.reset-quiz-fixed-btn {
+    position: fixed;
+    bottom: 20px; /* ระยะห่างจากด้านล่าง */
+    right: 20px; /* ระยะห่างจากด้านขวา */
+    z-index: 1000; /* ให้ปุ่มอยู่ด้านบนสุด */
+    padding: 12px 25px; /* ขนาด padding */
+    font-size: 1.2em; /* ขนาดตัวอักษร */
+    border-radius: 8px; /* ความโค้งมนของมุม */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* เงา */
+    display: none; /* ซ่อนไว้ตอนแรก */
+}
+
+/* Dark theme for fixed reset button */
+body.dark-theme .reset-quiz-fixed-btn {
+    background-color: #dc3545; /* สีแดงสำหรับ Dark theme */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
 /* New styles for navigation and action buttons */
 .navigation-buttons, .action-buttons {
     display: flex;
@@ -532,6 +553,8 @@ body.dark-theme .question-counter-fixed {
     gap: 15px; /* Space between buttons */
     margin-top: 25px;
     width: 100%;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center items horizontally when flex-direction is column */
 }
 
 .btn {
@@ -689,6 +712,13 @@ body.dark-theme .question-counter-fixed {
     #quizSelectionButtons {
         grid-template-columns: 1fr; /* ให้เป็น 1 คอลัมน์บนมือถือเพื่อความอ่านง่าย */
         max-width: 350px; /* จำกัดความกว้างเพื่อให้ปุ่มไม่กว้างเกินไป */
+    }
+    /* Responsive for fixed reset button */
+    .reset-quiz-fixed-btn {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 20px;
+        font-size: 1em;
     }
 }
 

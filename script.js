@@ -206,6 +206,7 @@ async function loadQuestions(quizType) {
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('quizScreen').style.display = 'block';
         questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบที่ย้ายมาอยู่ด้านนอก
+        resetQuizBtn.style.display = 'block'; // แสดงปุ่มรีเซ็ตเมื่อเริ่มทำข้อสอบ
         
         // บันทึกความคืบหน้าเริ่มต้น
         saveProgress();
@@ -302,7 +303,7 @@ function displayQuestion() {
     // อัปเดตสถานะปุ่มนำทาง
     prevBtn.disabled = currentQuestionIndex === 0;
     nextBtn.disabled = currentQuestionIndex === questions.length - 1;
-    resetQuizBtn.disabled = false; // เปิดใช้งานปุ่มรีเซ็ตเสมอเมื่อมีข้อสอบโหลดอยู่
+    // resetQuizBtn.disabled = false; // Moved to global visibility control
 }
 
 /**
@@ -387,6 +388,7 @@ function resetQuiz(showMsg = true) {
         document.getElementById('resultScreen').style.display = 'none';
         document.getElementById('homeScreen').style.display = 'block';
         questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
+        resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
         questions = []; // เคลียร์คำถามที่โหลดอยู่
 
         if (showMsg) {
@@ -405,6 +407,7 @@ function displayResult() {
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('resultScreen').style.display = 'block';
     questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบเมื่อแสดงผลลัพธ์
+    resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ตเมื่อแสดงผลลัพธ์
     document.getElementById('scoreDisplay').innerText = `คุณได้คะแนน ${score} จาก ${questions.length} ข้อ`;
     // เมื่อจบข้อสอบ ให้ล้างความคืบหน้า
     resetQuiz(false); // ไม่ต้องแสดงข้อความรีเซ็ต
@@ -577,6 +580,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
         questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
+        resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
         closeNav();
     });
 
@@ -599,6 +603,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ซ่อนตัวนับข้อสอบเมื่อโหลดหน้าครั้งแรก (เพราะยังไม่อยู่ในหน้า quizScreen)
     questionCounterElement.style.display = 'none';
+    resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ตเมื่อโหลดหน้าครั้งแรก
 
     // โหลดความคืบหน้าเมื่อ DOM โหลดเสร็จ
     const savedProgress = loadProgress();
@@ -653,6 +658,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('homeScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
             questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบ
+            resetQuizBtn.style.display = 'block'; // แสดงปุ่มรีเซ็ตเมื่อโหลดข้อสอบ
             displayQuestion(); // แสดงคำถามที่บันทึกไว้
         } catch (error) {
             console.error("เกิดข้อผิดพลาดในการโหลดโมดูลคำถามจาก localStorage:", error);
@@ -665,5 +671,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
         questionCounterElement.style.display = 'none';
+        resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
     }
 });

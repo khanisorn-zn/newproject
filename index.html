@@ -69,13 +69,10 @@
                 <p id="feedbackText"></p>
                 <p id="explanationText"></p>
             </div>
-            <!-- ปุ่มนำทางและรีเซ็ต -->
+            <!-- ปุ่มนำทาง -->
             <div class="navigation-buttons">
-                <button id="prevBtn" class="btn btn-secondary">ย้อนกลับ</button>
                 <button id="nextBtn" class="btn btn-primary">ถัดไป</button>
-            </div>
-            <div class="action-buttons">
-                <button id="resetQuizBtn" class="btn btn-danger">รีเซ็ตข้อสอบ</button>
+                <button id="prevBtn" class="btn btn-secondary">ย้อนกลับ</button>
             </div>
             <div id="messageBox" class="message-box"></div> <!-- กล่องข้อความแจ้งเตือน -->
         </div>
@@ -86,6 +83,9 @@
             <button id="restartButton">ทำข้อสอบอีกครั้ง</button>
         </div>
     </div>
+
+    <!-- ปุ่มรีเซ็ตข้อสอบที่ย้ายมาอยู่มุมขวาล่าง -->
+    <button id="resetQuizBtn" class="reset-quiz-fixed-btn btn btn-danger" style="display: none;">รีเซ็ตข้อสอบ</button>
 
     <!-- เปลี่ยน type ของ script เป็น "module" เพื่อรองรับ import/export -->
     <script type="module" src="script.js"></script>
