@@ -133,6 +133,7 @@ body {
     align-items: center;
     justify-content: center;
     margin-top: 0; /* ลบ margin-top เดิม */
+    position: relative; /* เพิ่มเพื่อให้ questionCounter สามารถใช้ position absolute ได้ */
 }
 
 h1, h2 {
@@ -287,6 +288,175 @@ button:active {
     background-color: #0056b3;
 }
 
+/* Theme toggle button specific style */
+.theme-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001; /* Same as openbtn */
+    background-color: #4a4a4a; /* Consistent with sidebar/openbtn */
+    color: white;
+    padding: 10px 15px;
+    border: none; /* Remove default button border */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: auto; /* Override 100% width from general button style */
+    margin-top: 0; /* Override margin-top from general button style */
+    font-size: 1.2em; /* Adjust icon size */
+}
+
+.theme-toggle-btn:hover {
+    background-color: #616161;
+    transform: translateY(-2px);
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(0);
+}
+
+/* Dark theme styles */
+body.dark-theme {
+    background: linear-gradient(to right, #2c3e50 0%, #34495e 100%); /* Darker gradient */
+    color: #f0f0f0;
+}
+
+body.dark-theme .container {
+    background-color: #34495e; /* Darker container */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme h1, body.dark-theme h2 {
+    color: #f5f5f5;
+}
+
+body.dark-theme p {
+    color: #cccccc;
+}
+
+body.dark-theme button { /* General buttons in dark theme */
+    background-color: #555;
+    color: #f0f0f0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme button:hover {
+    background-color: #666;
+}
+
+body.dark-theme .option-button { /* Option buttons in dark theme */
+    background-color: #444;
+    color: #f0f0f0;
+    border-color: #666;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-theme .option-button:hover {
+    background-color: #555;
+    border-color: #888;
+}
+
+body.dark-theme .option-button.correct {
+    background-color: #28a745; /* Green remains */
+    border-color: #28a745;
+    color: white;
+}
+
+body.dark-theme .option-button.wrong {
+    background-color: #dc3545; /* Red remains */
+    border-color: #dc3545;
+    color: white;
+}
+
+body.dark-theme #feedbackContainer {
+    background-color: #3a3a3a;
+    border-color: #666;
+}
+
+body.dark-theme #feedbackText {
+    color: #f0f0f0;
+}
+
+body.dark-theme #explanationText {
+    color: #cccccc;
+}
+
+body.dark-theme #scoreDisplay {
+    color: #28a745; /* Green remains */
+}
+
+body.dark-theme #restartButton {
+    background-color: #2575fc; /* Blue remains */
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+}
+
+body.dark-theme .sidebar {
+    background-color: #222; /* Even darker sidebar */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-theme .sidebar a {
+    color: #bbb;
+}
+
+body.dark-theme .sidebar a:hover {
+    background-color: #444;
+}
+
+body.dark-theme .sidebar-header {
+    border-bottom-color: #444;
+}
+
+body.dark-theme .sidebar-header i {
+    color: #8fd3f4; /* Keep light blue icon */
+}
+
+body.dark-theme .sidebar-header h3 {
+    color: #e0e0e0;
+}
+
+body.dark-theme .openbtn {
+    background-color: #222;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .openbtn:hover {
+    background-color: #444;
+}
+
+body.dark-theme .theme-toggle-btn {
+    background-color: #222;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .theme-toggle-btn:hover {
+    background-color: #444;
+}
+
+/* Question Counter Style */
+#questionCounter {
+    position: absolute; /* ตำแหน่งสัมบูรณ์ภายใน .container */
+    top: 15px; /* ระยะห่างจากด้านบน */
+    right: 15px; /* ระยะห่างจากด้านขวา */
+    font-size: 0.9em;
+    color: #666; /* สีข้อความ */
+    background-color: #f0f0f0; /* พื้นหลังเล็กน้อย */
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10; /* ให้แสดงอยู่ด้านบน */
+}
+
+/* Dark theme for question counter */
+body.dark-theme #questionCounter {
+    background-color: #444;
+    color: #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .sidebar {
@@ -306,6 +476,12 @@ button:active {
         top: 10px;
         left: 10px;
     }
+    .theme-toggle-btn { /* Adjust position for smaller screens */
+        font-size: 1em;
+        padding: 8px 12px;
+        top: 10px;
+        right: 10px;
+    }
     #main {
         padding: 10px;
     }
@@ -322,6 +498,12 @@ button:active {
     button, .option-button {
         font-size: 1em;
         padding: 12px 25px;
+    }
+    #questionCounter { /* Adjust position for smaller screens */
+        top: 10px;
+        right: 10px;
+        font-size: 0.8em;
+        padding: 3px 8px;
     }
 }
 

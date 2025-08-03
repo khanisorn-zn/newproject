@@ -9,43 +9,90 @@ let score = 0;
 let selectedOptionButton = null;
 let quizCompleted = false;
 
+// รับ Element ของตัวนับข้อสอบ
+const questionCounterElement = document.getElementById('questionCounter');
+
+// ฟังก์ชันสำหรับสุ่มลำดับของ Array (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+}
+
 // ฟังก์ชันสำหรับโหลดคำถามจากไฟล์ภายนอก
 async function loadQuestions(quizType) {
     let module;
     try {
-        switch (quizType) {
-            case 'civil_servant_act':
-                module = await import('./data/civil_servant_act.js');
-                questions = module.civilServantActQuestions;
-                break;
-            case 'pdpa_act':
-                module = await import('./data/pdpa_act.js');
-                questions = module.pdpaActQuestions;
-                break;
-            case 'moe_act':
-                module = await import('./data/moe_act.js');
-                questions = module.moeActQuestions;
-                break;
-            case 'good_governance_act':
-                module = await import('./data/good_governance_act.js');
-                questions = module.goodGovernanceActQuestions;
-                break;
-            case 'tort_liability_act':
-                module = await import('./data/tort_liability_act.js');
-                questions = module.tortLiabilityActQuestions;
-                break;
-            case 'admin_org_act':
-                module = await import('./data/admin_org_act.js');
-                questions = module.adminOrgActQuestions;
-                break;
-            case 'leave_regulations':
-                module = await import('./data/leave_regulations.js');
-                questions = module.leaveRegulationsQuestions;
-                break;
-            default:
-                console.error("ไม่พบประเภทข้อสอบที่ระบุ:", quizType);
-                questions = [];
-                return;
+        if (quizType === 'all_acts_random') {
+            // โหลดคำถามจากทุกไฟล์
+            const [
+                civilServantModule, pdpaModule, moeModule,
+                goodGovernanceModule, tortLiabilityModule,
+                adminOrgModule, leaveRegulationsModule
+            ] = await Promise.all([
+                import('./data/civil_servant_act.js'),
+                import('./data/pdpa_act.js'),
+                import('./data/moe_act.js'),
+                import('./data/good_governance_act.js'),
+                import('./data/tort_liability_act.js'),
+                import('./data/admin_org_act.js'),
+                import('./data/leave_regulations.js')
+            ]);
+            
+            // รวมคำถามทั้งหมดเข้าด้วยกัน
+            questions = [
+                ...civilServantModule.civilServantActQuestions,
+                ...pdpaModule.pdpaActQuestions,
+                ...moeModule.moeActQuestions,
+                ...goodGovernanceModule.goodGovernanceActQuestions,
+                ...tortLiabilityModule.tortLiabilityActQuestions,
+                ...adminOrgModule.adminOrgActQuestions,
+                ...leaveRegulationsModule.leaveRegulationsQuestions
+            ];
+            
+            // สุ่มคำถามทั้งหมด
+            questions = shuffleArray(questions);
+
+        } else {
+            // โหลดคำถามตามประเภทที่เลือก และสุ่มเฉพาะใน พ.ร.บ. นั้นๆ
+            switch (quizType) {
+                case 'civil_servant_act':
+                    module = await import('./data/civil_servant_act.js');
+                    questions = module.civilServantActQuestions;
+                    break;
+                case 'pdpa_act':
+                    module = await import('./data/pdpa_act.js');
+                    questions = module.pdpaActQuestions;
+                    break;
+                case 'moe_act':
+                    module = await import('./data/moe_act.js');
+                    questions = module.moeActQuestions;
+                    break;
+                case 'good_governance_act':
+                    module = await import('./data/good_governance_act.js');
+                    questions = module.goodGovernanceActQuestions;
+                    break;
+                case 'tort_liability_act':
+                    module = await import('./data/tort_liability_act.js');
+                    questions = module.tortLiabilityActQuestions;
+                    break;
+                case 'admin_org_act':
+                    module = await import('./data/admin_org_act.js');
+                    questions = module.adminOrgActQuestions;
+                    break;
+                case 'leave_regulations':
+                    module = await import('./data/leave_regulations.js');
+                    questions = module.leaveRegulationsQuestions;
+                    break;
+                default:
+                    console.error("ไม่พบประเภทข้อสอบที่ระบุ:", quizType);
+                    questions = [];
+                    return;
+            }
+            // สุ่มคำถามสำหรับ พ.ร.บ. ที่เลือก
+            questions = shuffleArray(questions);
         }
 
         console.log(`โหลดคำถามสำหรับ ${quizType} สำเร็จ! มี ${questions.length} ข้อ`);
@@ -59,6 +106,7 @@ async function loadQuestions(quizType) {
         // ซ่อนหน้าจอเลือก พ.ร.บ. (homeScreen) และแสดงหน้าจอทำข้อสอบ (quizScreen) ทันที
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('quizScreen').style.display = 'block';
+        questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบ
         showQuestion(currentQuestionIndex); // แสดงคำถามข้อแรก
         
         closeNav(); // ปิด sidebar หลังจากเลือก พ.ร.บ.
@@ -75,6 +123,7 @@ function showQuestion(index) {
         alert("ยังไม่มีคำถามให้ทำ กรุณาเลือก พ.ร.บ. ก่อน");
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('homeScreen').style.display = 'block'; // กลับไปหน้าเลือก พ.ร.บ.
+        questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
         return;
     }
     if (index >= questions.length) {
@@ -86,6 +135,9 @@ function showQuestion(index) {
     const cleanQuestionText = questionData.question.replace(/^\d+\.\s*/, '');
     document.getElementById('questionText').innerText = (index + 1) + ". " + cleanQuestionText;
     
+    // อัปเดตตัวนับข้อสอบ
+    questionCounterElement.innerText = `ข้อที่ ${index + 1} จาก ${questions.length}`;
+
     const optionsContainer = document.getElementById('optionsContainer');
     optionsContainer.innerHTML = '';
     optionsContainer.style.pointerEvents = 'auto';
@@ -151,6 +203,7 @@ function displayResult() {
     quizCompleted = true;
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('resultScreen').style.display = 'block';
+    questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบเมื่อแสดงผลลัพธ์
     document.getElementById('scoreDisplay').innerText = `คุณได้คะแนน ${score} จาก ${questions.length} ข้อ`;
 }
 
@@ -162,6 +215,7 @@ function restartQuiz() {
     selectedOptionButton = null;
     document.getElementById('resultScreen').style.display = 'none';
     document.getElementById('homeScreen').style.display = 'block'; // กลับไปหน้าเลือก พ.ร.บ.
+    questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
     closeNav();
 }
 
@@ -182,24 +236,52 @@ function closeNav() {
     }
 }
 
+// --- Theme Toggle Logic ---
+const themeToggleButton = document.getElementById('themeToggleButton');
+const body = document.body;
+const THEME_KEY = 'appTheme'; // Key for localStorage
+
+// Function to apply theme
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        body.classList.add('dark-theme');
+        themeToggleButton.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for dark theme
+    } else {
+        body.classList.remove('dark-theme');
+        themeToggleButton.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for light theme
+    }
+}
+
+
 // --- Event Listeners ---
 
 // เมื่อ DOM โหลดเสร็จ ให้แนบ Event Listeners กับปุ่มต่างๆ
 document.addEventListener('DOMContentLoaded', (event) => {
+    // Check for saved theme on load
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        // Default to light theme if no preference saved
+        applyTheme('light');
+    }
+
     // ปุ่ม Hamburger icon สำหรับเปิด Sidebar
     document.querySelector('.openbtn').addEventListener('click', openNav);
 
     // ปุ่มปิด Sidebar
     document.querySelector('.closebtn').addEventListener('click', closeNav);
 
-    // ลบ Event Listener สำหรับปุ่ม "เริ่มทำข้อสอบ" (startButton) ออก เนื่องจากไม่มีปุ่มนี้แล้ว
-    // document.getElementById('startButton').addEventListener('click', function() {
-    //     console.log("ปุ่ม 'เริ่มทำข้อสอบ' ถูกกดแล้ว!");
-    //     document.getElementById('homeScreen').style.display = 'none';
-    //     document.getElementById('quizScreen').style.display = 'block';
-    //     showQuestion(currentQuestionIndex);
-    //     closeNav();
-    // });
+    // Event Listener สำหรับ Theme Toggle Button
+    themeToggleButton.addEventListener('click', () => {
+        if (body.classList.contains('dark-theme')) {
+            applyTheme('light');
+            localStorage.setItem(THEME_KEY, 'light');
+        } else {
+            applyTheme('dark');
+            localStorage.setItem(THEME_KEY, 'dark');
+        }
+    });
 
     // Event Listener สำหรับปุ่ม "ข้อต่อไป"
     document.getElementById('nextButton').addEventListener('click', function() {
@@ -260,12 +342,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         loadQuestions('leave_regulations');
     });
 
+    // Event Listener สำหรับปุ่ม "สุ่มรวม พ.ร.บ. ทั้งหมด" (ใหม่)
+    document.getElementById('selectAllActsRandomBtn').addEventListener('click', function() {
+        console.log("เลือก สุ่มรวม พ.ร.บ. ทั้งหมด");
+        loadQuestions('all_acts_random');
+    });
+
     // Event Listener สำหรับปุ่ม "เลือก พ.ร.บ." ใน Sidebar
     document.getElementById('sidebarSelectQuizBtn').addEventListener('click', function() {
         console.log("ปุ่ม 'เลือก พ.ร.บ.' ใน Sidebar ถูกกดแล้ว!");
         document.getElementById('homeScreen').style.display = 'block'; // แสดงหน้าจอเลือก พ.ร.บ.
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
+        questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
         closeNav();
     });
 
@@ -282,6 +371,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // เมื่อโหลดหน้าเว็บครั้งแรก homeScreen จะแสดงผลทันที ไม่ต้องซ่อน selectQuizScreen
-    // document.getElementById('selectQuizScreen').style.display = 'none';
+    // ซ่อนตัวนับข้อสอบเมื่อโหลดหน้าครั้งแรก (เพราะยังไม่อยู่ในหน้า quizScreen)
+    questionCounterElement.style.display = 'none';
 });

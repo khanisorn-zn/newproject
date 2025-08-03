@@ -30,6 +30,8 @@
     <div id="main">
         <!-- ปุ่ม Hamburger icon สำหรับเปิด Sidebar -->
         <span class="openbtn">&#9776;</span>
+        <!-- ปุ่มเปลี่ยนธีม -->
+        <button id="themeToggleButton" class="theme-toggle-btn"><i class="fas fa-moon"></i></button>
 
         <!-- หน้าจอหลัก: เปลี่ยนเป็นหน้าจอสำหรับเลือก พ.ร.บ. ทันที -->
         <div class="container" id="homeScreen">
@@ -44,10 +46,12 @@
                 <button id="selectTortLiabilityActBtn">พ.ร.บ. ความรับผิดทางละเมิดของเจ้าหน้าที่ พ.ศ. 2539</button>
                 <button id="selectAdminOrgActBtn">พ.ร.บ. ระเบียบบริหารราชการแผ่นดิน พ.ศ. 2534</button>
                 <button id="selectLeaveRegulationsBtn">ระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ พ.ศ. 2555</button>
+                <button id="selectAllActsRandomBtn" class="random-all-btn">สุ่มรวม พ.ร.บ. ทั้งหมด</button>
             </div>
         </div>
 
         <div class="container" id="quizScreen" style="display: none;">
+            <div id="questionCounter"></div> <!-- เพิ่มตัวนับข้อสอบที่นี่ -->
             <h2 id="questionText"></h2>
             <div id="optionsContainer">
                 <!-- ตัวเลือกจะถูกสร้างด้วย JavaScript -->
