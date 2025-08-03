@@ -38,9 +38,9 @@ async function loadQuestions(quizType) {
                 module = await import('./data/admin_org_act.js');
                 questions = module.adminOrgActQuestions;
                 break;
-            case 'leave_regulations': // เพิ่ม case สำหรับระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ
+            case 'leave_regulations':
                 module = await import('./data/leave_regulations.js');
-                questions = module.leaveRegulationsQuestions; // ตรวจสอบชื่อตัวแปรใน leave_regulations.js ด้วย
+                questions = module.leaveRegulationsQuestions;
                 break;
             default:
                 console.error("ไม่พบประเภทข้อสอบที่ระบุ:", quizType);
@@ -50,14 +50,16 @@ async function loadQuestions(quizType) {
 
         console.log(`โหลดคำถามสำหรับ ${quizType} สำเร็จ! มี ${questions.length} ข้อ`);
         
-        // รีเซ็ตสถานะข้อสอบและแสดงหน้าจอหลักหลังจากโหลดคำถาม
+        // รีเซ็ตสถานะข้อสอบ
         currentQuestionIndex = 0;
         score = 0;
         quizCompleted = false;
         selectedOptionButton = null;
         
-        document.getElementById('selectQuizScreen').style.display = 'none';
-        document.getElementById('homeScreen').style.display = 'block';
+        // ซ่อนหน้าจอเลือก พ.ร.บ. (homeScreen) และแสดงหน้าจอทำข้อสอบ (quizScreen) ทันที
+        document.getElementById('homeScreen').style.display = 'none';
+        document.getElementById('quizScreen').style.display = 'block';
+        showQuestion(currentQuestionIndex); // แสดงคำถามข้อแรก
         
         closeNav(); // ปิด sidebar หลังจากเลือก พ.ร.บ.
     } catch (error) {
@@ -72,7 +74,7 @@ function showQuestion(index) {
     if (questions.length === 0) {
         alert("ยังไม่มีคำถามให้ทำ กรุณาเลือก พ.ร.บ. ก่อน");
         document.getElementById('quizScreen').style.display = 'none';
-        document.getElementById('selectQuizScreen').style.display = 'block';
+        document.getElementById('homeScreen').style.display = 'block'; // กลับไปหน้าเลือก พ.ร.บ.
         return;
     }
     if (index >= questions.length) {
@@ -152,14 +154,14 @@ function displayResult() {
     document.getElementById('scoreDisplay').innerText = `คุณได้คะแนน ${score} จาก ${questions.length} ข้อ`;
 }
 
-// ฟังก์ชันสำหรับเริ่มทำข้อสอบใหม่
+// ฟังก์ชันสำหรับเริ่มทำข้อสอบใหม่ (กลับไปหน้าเลือก พ.ร.บ.)
 function restartQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     quizCompleted = false;
     selectedOptionButton = null;
     document.getElementById('resultScreen').style.display = 'none';
-    document.getElementById('homeScreen').style.display = 'block';
+    document.getElementById('homeScreen').style.display = 'block'; // กลับไปหน้าเลือก พ.ร.บ.
     closeNav();
 }
 
@@ -190,14 +192,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // ปุ่มปิด Sidebar
     document.querySelector('.closebtn').addEventListener('click', closeNav);
 
-    // Event Listener สำหรับปุ่ม "เริ่มทำข้อสอบ" (บนหน้าจอหลัก)
-    document.getElementById('startButton').addEventListener('click', function() {
-        console.log("ปุ่ม 'เริ่มทำข้อสอบ' ถูกกดแล้ว!");
-        document.getElementById('homeScreen').style.display = 'none';
-        document.getElementById('quizScreen').style.display = 'block';
-        showQuestion(currentQuestionIndex);
-        closeNav();
-    });
+    // ลบ Event Listener สำหรับปุ่ม "เริ่มทำข้อสอบ" (startButton) ออก เนื่องจากไม่มีปุ่มนี้แล้ว
+    // document.getElementById('startButton').addEventListener('click', function() {
+    //     console.log("ปุ่ม 'เริ่มทำข้อสอบ' ถูกกดแล้ว!");
+    //     document.getElementById('homeScreen').style.display = 'none';
+    //     document.getElementById('quizScreen').style.display = 'block';
+    //     showQuestion(currentQuestionIndex);
+    //     closeNav();
+    // });
 
     // Event Listener สำหรับปุ่ม "ข้อต่อไป"
     document.getElementById('nextButton').addEventListener('click', function() {
@@ -211,11 +213,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('restartButton').addEventListener('click', restartQuiz);
 
     // Event Listener สำหรับปุ่ม Login/Logout ใน Sidebar (ยังไม่มีฟังก์ชันจริง)
-    // document.getElementById('sidebarLoginBtn').addEventListener('click', function() {
-    //     alert("ยังไม่มีระบบ Login จริงจัง! จะพัฒนาในขั้นตอนถัดไป");
-    //     closeNav();
-    // });
-
     document.getElementById('sidebarLogoutBtn').addEventListener('click', function() {
         alert("ยังไม่มีระบบ Logout จริงจัง! จะพัฒนาในขั้นตอนถัดไป");
         closeNav();
@@ -257,8 +254,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         loadQuestions('admin_org_act');
     });
 
-    // Event Listener สำหรับปุ่มเลือก ระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ (ใหม่)
-    document.getElementById('selectLeaveRegulationsBtn').addEventListener('click', function() { // เพิ่ม Event Listener ใหม่
+    // Event Listener สำหรับปุ่มเลือก ระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ
+    document.getElementById('selectLeaveRegulationsBtn').addEventListener('click', function() {
         console.log("เลือก ระเบียบสำนักนายกรัฐมนตรีว่าด้วยการลาของข้าราชการ");
         loadQuestions('leave_regulations');
     });
@@ -266,10 +263,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Event Listener สำหรับปุ่ม "เลือก พ.ร.บ." ใน Sidebar
     document.getElementById('sidebarSelectQuizBtn').addEventListener('click', function() {
         console.log("ปุ่ม 'เลือก พ.ร.บ.' ใน Sidebar ถูกกดแล้ว!");
-        document.getElementById('homeScreen').style.display = 'none';
+        document.getElementById('homeScreen').style.display = 'block'; // แสดงหน้าจอเลือก พ.ร.บ.
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
-        document.getElementById('selectQuizScreen').style.display = 'block';
         closeNav();
     });
 
@@ -286,6 +282,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // เมื่อโหลดหน้าเว็บครั้งแรก ให้ซ่อนหน้าจอเลือก พ.ร.บ.
-    document.getElementById('selectQuizScreen').style.display = 'none';
+    // เมื่อโหลดหน้าเว็บครั้งแรก homeScreen จะแสดงผลทันที ไม่ต้องซ่อน selectQuizScreen
+    // document.getElementById('selectQuizScreen').style.display = 'none';
 });

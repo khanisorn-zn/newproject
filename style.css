@@ -1,172 +1,53 @@
 /* General Body Styles */
 body {
-    font-family: 'Prompt', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1a1a1a; /* Dark background color */
-    color: #f0f0f0; /* Light text color for contrast */
+    font-family: 'Prompt', sans-serif; /* ใช้ฟอนต์ Prompt เพื่อความสวยงาม */
+    /* เปลี่ยนพื้นหลังเป็นสีที่นวลตาและทันสมัยขึ้น */
+    background: linear-gradient(to right, #e0f7fa 0%, #e8f5e9 100%); /* โทนสีฟ้าอ่อน-เขียวอ่อน สบายตา */
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-}
-
-/* Main content area */
-#main {
-    transition: margin-left .5s;
-    padding: 16px;
-    flex-grow: 1; /* Allow main content to grow */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    text-align: center;
-}
-
-/* Container for screens (home, select quiz, quiz, result) */
-.container {
-    background-color: #2c2c2c; /* Slightly lighter dark background for containers */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow */
-    max-width: 90%; /* Responsive width */
-    width: 500px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px; /* Space between elements */
+    min-height: 100vh; /* ใช้ min-height เพื่อให้เต็มหน้าจอเสมอ */
+    margin: 0;
+    text-align: center;
+    color: #333; /* สีข้อความหลัก */
+    padding: 0; /* ลบ padding ออกจาก body */
+    box-sizing: border-box;
+    overflow-x: hidden; /* ซ่อน scrollbar แนวนอนเมื่อ sidebar เปิด */
 }
 
-/* Headings */
-h1, h2 {
-    color: #e0e0e0; /* Light color for headings */
-    margin-bottom: 15px;
-    font-weight: 700;
-}
-
-/* Paragraphs */
-p {
-    color: #cccccc; /* Slightly darker light color for paragraphs */
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-/* Buttons */
-button {
-    background-color: #007bff; /* Blue for primary actions */
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 300px;
-}
-
-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-}
-
-button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Option buttons specific styling */
-.option-button {
-    background-color: #444444; /* Darker gray for options */
-    color: #f0f0f0;
-    border: 1px solid #555555;
-    text-align: left;
-    padding: 15px 20px;
-    font-size: 1em;
-    width: 100%;
-    max-width: 400px; /* Wider for options */
-    margin-bottom: 10px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.option-button:hover {
-    background-color: #555555;
-    border-color: #777777;
-}
-
-.option-button.correct {
-    background-color: #28a745; /* Green for correct answer */
-    border-color: #28a745;
-    color: white;
-}
-
-.option-button.wrong {
-    background-color: #dc3545; /* Red for wrong answer */
-    border-color: #dc3545;
-    color: white;
-}
-
-/* Feedback container */
-#feedbackContainer {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #3a3a3a; /* Slightly lighter dark for feedback */
-    border: 1px solid #555555;
-    text-align: left;
-    width: 100%;
-    max-width: 400px;
-}
-
-#feedbackText {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.correct-feedback {
-    color: #28a745;
-}
-
-.wrong-feedback {
-    color: #dc3545;
-}
-
-#explanationText {
-    color: #cccccc;
-    font-size: 0.95em;
-}
-
-/* Sidebar styles */
+/* สไตล์สำหรับ Sidebar */
 .sidebar {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
+    height: 100%; /* เต็มความสูงหน้าจอ */
+    width: 0; /* ซ่อนไว้ตอนแรก */
+    position: fixed; /* อยู่กับที่ */
+    z-index: 1000; /* อยู่ด้านบนสุด */
     top: 0;
     left: 0;
-    background-color: #333; /* Darker gray for sidebar */
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    background-color: #4a4a4a; /* สีพื้นหลัง Sidebar ที่ยังคงความเข้มเล็กน้อย */
+    overflow-x: hidden; /* ซ่อนเนื้อหาที่ล้น */
+    transition: 0.5s; /* เพิ่ม animation การเปิด/ปิด */
+    padding-top: 60px; /* เว้นที่ด้านบนสำหรับปุ่มปิด */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); /* เงาด้านข้าง */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* จัดเรียงข้อความชิดซ้าย */
 }
 
 .sidebar a {
-    padding: 15px 8px 15px 32px;
+    padding: 15px 25px;
     text-decoration: none;
     font-size: 1.2em;
-    color: #818181;
+    color: #f1f1f1; /* สีข้อความใน Sidebar */
     display: block;
     transition: 0.3s;
+    width: 100%; /* ให้ลิงก์เต็มความกว้าง */
+    text-align: left;
+    box-sizing: border-box;
 }
 
 .sidebar a:hover {
-    color: #f1f1f1;
-    background-color: #555;
+    color: #fff;
+    background-color: #616161; /* สีเข้มขึ้นเมื่อ hover */
 }
 
 .sidebar .closebtn {
@@ -175,60 +56,287 @@ button:active {
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+    color: #f1f1f1;
+}
+
+.sidebar .closebtn:hover {
+    color: #fff;
+    background-color: transparent; /* ไม่เปลี่ยนสีพื้นหลังเมื่อ hover ที่ปุ่มปิด */
 }
 
 .sidebar-header {
+    padding: 15px 25px;
+    color: #fff;
     text-align: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #555;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #616161;
     margin-bottom: 20px;
 }
 
 .sidebar-header i {
     font-size: 3em;
-    color: #007bff; /* Blue icon */
     margin-bottom: 10px;
+    color: #8fd3f4; /* สีไอคอนให้เข้ากับโทนใหม่ */
 }
 
 .sidebar-header h3 {
-    color: #e0e0e0;
     margin: 0;
+    font-size: 1.5em;
 }
 
-/* Hamburger icon */
+/* สไตล์สำหรับเนื้อหาหลัก */
+#main {
+    transition: margin-left .5s; /* เพิ่ม animation การเลื่อนเนื้อหา */
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* จัดเรียงเนื้อหาหลักให้อยู่ตรงกลาง */
+    min-height: 100vh;
+}
+
+/* ปุ่ม Hamburger icon */
 .openbtn {
     font-size: 30px;
     cursor: pointer;
-    background-color: transparent;
-    color: #007bff; /* Blue hamburger icon */
+    background-color: #4a4a4a; /* สีเดียวกับ sidebar */
+    color: white;
     padding: 10px 15px;
     border: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
     border-radius: 8px;
+    position: fixed; /* อยู่กับที่ */
+    top: 20px;
+    left: 20px;
+    z-index: 1001; /* อยู่ด้านบน Sidebar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease;
 }
 
 .openbtn:hover {
-    background-color: #333;
+    background-color: #616161;
+}
+
+/* สไตล์สำหรับ container เดิม */
+.container {
+    background-color: #ffffff; /* พื้นหลังสีขาวสำหรับ container */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* เงาอ่อนลง */
+    max-width: 700px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0; /* ลบ margin-top เดิม */
+}
+
+h1, h2 {
+    color: #333; /* สีข้อความเข้ม */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #2575fc; /* สีน้ำเงินสดใสขึ้น */
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #444; /* สีเทาเข้ม */
+}
+
+p {
+    color: #666; /* สีเทาปานกลาง */
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+button {
+    background-color: #28a745; /* สีเขียวสดใส */
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* New: Styles for the quiz selection buttons container */
+#quizSelectionButtons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 2 คอลัมน์ Responsive */
+    gap: 15px; /* ระยะห่างระหว่างปุ่ม */
+    width: 100%; /* ให้คอนเทนเนอร์ปุ่มเต็มความกว้างของ .container */
+    max-width: 600px; /* จำกัดความกว้างสูงสุดของปุ่ม */
+    justify-content: center; /* จัดให้อยู่ตรงกลางในแนวนอน */
+}
+
+/* Option buttons specific styling */
+.option-button {
+    background-color: #f0f0f0; /* พื้นหลังตัวเลือกสีขาวนวล */
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 15px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: left;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.option-button:hover {
+    background-color: #e9e9e9;
+    border-color: #c0c0c0;
+    transform: translateY(-1px);
+}
+
+.option-button.correct {
+    background-color: #d4edda; /* เขียวอ่อนสำหรับถูก */
+    border-color: #28a745;
+    color: #155724;
+    font-weight: bold;
+}
+
+.option-button.wrong {
+    background-color: #f8d7da; /* แดงอ่อนสำหรับผิด */
+    border-color: #dc3545;
+    color: #721c24;
+    font-weight: bold;
+}
+
+/* สไตล์สำหรับส่วนแสดงผลเฉลยและเหตุผล */
+#feedbackContainer {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #e0f7fa; /* ฟ้าอ่อนสำหรับ feedback */
+    border: 1px solid #b2ebf2;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    display: none;
+}
+
+#feedbackText {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
+#feedbackText.correct-feedback {
+    color: #28a745;
+}
+
+#feedbackText.wrong-feedback {
+    color: #dc3545;
+}
+
+#explanationText {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.6;
+}
+
+
+#resultScreen {
+    text-align: center;
+}
+
+#resultScreen h2 {
+    color: #2575fc; /* สีน้ำเงินสดใสขึ้น */
+    font-size: 2.2em;
+    margin-bottom: 20px;
+}
+
+#scoreDisplay {
+    font-size: 2em;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 30px;
+}
+
+#restartButton {
+    background-color: #2575fc; /* สีน้ำเงินสดใสขึ้น */
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+}
+
+#restartButton:hover {
+    background-color: #0056b3;
 }
 
 /* Responsive adjustments */
-@media screen and (max-height: 450px) {
-    .sidebar {padding-top: 15px;}
-    .sidebar a {font-size: 18px;}
-}
-
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .sidebar {
-        width: 0; /* Hidden by default on small screens */
+        padding-top: 15px;
     }
-    #main {
-        margin-left: 0;
+    .sidebar a {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+    .sidebar .closebtn {
+        font-size: 30px;
+        right: 15px;
     }
     .openbtn {
-        display: block; /* Always show hamburger on small screens */
+        font-size: 24px;
+        padding: 8px 12px;
+        top: 10px;
+        left: 10px;
+    }
+    #main {
+        padding: 10px;
+    }
+    .container {
+        padding: 25px;
+        margin: 10px;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    button, .option-button {
+        font-size: 1em;
+        padding: 12px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    h2 {
+        font-size: 1.3em;
+    }
+    button, .option-button {
+        font-size: 0.9em;
+        padding: 10px 20px;
     }
 }
