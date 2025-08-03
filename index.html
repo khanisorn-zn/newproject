@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แอปข้อสอบภาค ข. ก.พ.</title>
-    <!-- เพิ่มฟอนต์ Prompt จาก Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome สำหรับไอคอน -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- เพิ่มฟอนต์ Inter จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- เชื่อมโยงกับไฟล์ style.css ของเรา -->
     <link rel="stylesheet" href="style.css">
-    <!-- โค้ด Google AdSense (หากต้องการ) - วางไว้ที่นี่ -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
 <body>
 
@@ -60,7 +61,15 @@
                 <p id="feedbackText"></p>
                 <p id="explanationText"></p>
             </div>
-            <button id="nextButton" style="display: none;">ข้อต่อไป</button> 
+            <!-- ปุ่มนำทางและรีเซ็ต -->
+            <div class="navigation-buttons">
+                <button id="prevBtn" class="btn btn-secondary">ย้อนกลับ</button>
+                <button id="nextBtn" class="btn btn-primary">ถัดไป</button>
+            </div>
+            <div class="action-buttons">
+                <button id="resetQuizBtn" class="btn btn-danger">รีเซ็ตข้อสอบ</button>
+            </div>
+            <div id="messageBox" class="message-box"></div> <!-- กล่องข้อความแจ้งเตือน -->
         </div>
 
         <div class="container" id="resultScreen" style="display: none;">

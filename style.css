@@ -1,6 +1,6 @@
-/* General Body Styles */
+/* กำหนดฟอนต์ Inter สำหรับทั้ง body */
 body {
-    font-family: 'Prompt', sans-serif; /* ใช้ฟอนต์ Prompt เพื่อความสวยงาม */
+    font-family: "Inter", sans-serif;
     /* เปลี่ยนพื้นหลังเป็นสีที่นวลตาและทันสมัยขึ้น */
     background: linear-gradient(to right, #e0f7fa 0%, #e8f5e9 100%); /* โทนสีฟ้าอ่อน-เขียวอ่อน สบายตา */
     display: flex;
@@ -8,7 +8,7 @@ body {
     align-items: center;
     min-height: 100vh; /* ใช้ min-height เพื่อให้เต็มหน้าจอเสมอ */
     margin: 0;
-    text-align: center;
+    text-align: center; /* จัดกึ่งกลางข้อความและ inline-block children */
     color: #333; /* สีข้อความหลัก */
     padding: 0; /* ลบ padding ออกจาก body */
     box-sizing: border-box;
@@ -136,29 +136,38 @@ body {
     position: relative; /* เพิ่มเพื่อให้ questionCounter สามารถใช้ position absolute ได้ */
 }
 
-h1, h2 {
-    color: #333; /* สีข้อความเข้ม */
-    font-weight: 700;
-    margin-bottom: 20px;
+/* Home screen specific adjustments for centering */
+#homeScreen {
+    display: flex; /* ใช้ flexbox สำหรับ homeScreen */
+    flex-direction: column;
+    align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    width: 100%; /* ให้ homeScreen เต็มความกว้างของ main */
 }
 
 h1 {
-    font-size: 2.5em;
+    color: #333; /* สีข้อความเข้ม */
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 3em; /* เพิ่มขนาดฟอนต์ h1 ให้ใหญ่ขึ้นมาก */
     color: #2575fc; /* สีน้ำเงินสดใสขึ้น */
 }
 
 h2 {
-    font-size: 1.8em;
     color: #444; /* สีเทาเข้ม */
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 2.5em; /* เพิ่มขนาดฟอนต์ h2 ให้ใหญ่ขึ้นมาก */
 }
 
 p {
     color: #666; /* สีเทาปานกลาง */
-    font-size: 1.1em;
+    font-size: 1.8em; /* เพิ่มขนาดฟอนต์ p ให้ใหญ่ขึ้นมาก */
     line-height: 1.6;
     margin-bottom: 25px;
 }
 
+/* General button styles - will be overridden by specific classes */
 button {
     background-color: #28a745; /* สีเขียวสดใส */
     color: white;
@@ -189,7 +198,8 @@ button:active {
     gap: 15px; /* ระยะห่างระหว่างปุ่ม */
     width: 100%; /* ให้คอนเทนเนอร์ปุ่มเต็มความกว้างของ .container */
     max-width: 600px; /* จำกัดความกว้างสูงสุดของปุ่ม */
-    justify-content: center; /* จัดให้อยู่ตรงกลางในแนวนอน */
+    margin: 0 auto; /* จัดให้อยู่ตรงกลางในแนวนอน */
+    justify-items: center; /* จัดกึ่งกลางรายการใน grid */
 }
 
 /* Option buttons specific styling */
@@ -198,7 +208,7 @@ button:active {
     color: #333;
     border: 1px solid #ddd;
     padding: 15px;
-    font-size: 1.1em;
+    font-size: 1.2em; /* เพิ่มขนาดฟอนต์ตัวเลือก */
     cursor: pointer;
     border-radius: 8px;
     width: 100%;
@@ -208,11 +218,18 @@ button:active {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.option-button:hover {
+.option-button:hover:not(:disabled) { /* Add :not(:disabled) */
     background-color: #e9e9e9;
     border-color: #c0c0c0;
     transform: translateY(-1px);
 }
+
+.option-button:disabled { /* Style for disabled option buttons */
+    opacity: 0.7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 
 .option-button.correct {
     background-color: #d4edda; /* เขียวอ่อนสำหรับถูก */
@@ -243,7 +260,7 @@ button:active {
 
 #feedbackText {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.2em; /* เพิ่มขนาดฟอนต์ feedback */
     margin-bottom: 8px;
 }
 
@@ -256,7 +273,7 @@ button:active {
 }
 
 #explanationText {
-    font-size: 0.95em;
+    font-size: 1.1em; /* เพิ่มขนาดฟอนต์ explanation */
     color: #555;
     line-height: 1.6;
 }
@@ -268,12 +285,12 @@ button:active {
 
 #resultScreen h2 {
     color: #2575fc; /* สีน้ำเงินสดใสขึ้น */
-    font-size: 2.2em;
+    font-size: 2.5em; /* เพิ่มขนาดฟอนต์ h2 ในหน้าผลลัพธ์ */
     margin-bottom: 20px;
 }
 
 #scoreDisplay {
-    font-size: 2em;
+    font-size: 2.2em; /* เพิ่มขนาดฟอนต์ score */
     font-weight: bold;
     color: #28a745;
     margin-bottom: 30px;
@@ -351,7 +368,7 @@ body.dark-theme .option-button { /* Option buttons in dark theme */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-body.dark-theme .option-button:hover {
+body.dark-theme .option-button:hover:not(:disabled) {
     background-color: #555;
     border-color: #888;
 }
@@ -440,7 +457,7 @@ body.dark-theme .theme-toggle-btn:hover {
     position: absolute; /* ตำแหน่งสัมบูรณ์ภายใน .container */
     top: 15px; /* ระยะห่างจากด้านบน */
     right: 15px; /* ระยะห่างจากด้านขวา */
-    font-size: 0.9em;
+    font-size: 1em; /* เพิ่มขนาดฟอนต์ counter */
     color: #666; /* สีข้อความ */
     background-color: #f0f0f0; /* พื้นหลังเล็กน้อย */
     padding: 5px 10px;
@@ -454,6 +471,96 @@ body.dark-theme #questionCounter {
     background-color: #444;
     color: #ccc;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* New styles for navigation and action buttons */
+.navigation-buttons, .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Space between buttons */
+    margin-top: 25px;
+    width: 100%;
+}
+
+.btn {
+    padding: 12px 25px;
+    font-size: 1.2em; /* เพิ่มขนาดฟอนต์ปุ่ม */
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex-grow: 1; /* Allow buttons to grow */
+    max-width: 200px; /* เพิ่ม max-width ให้ปุ่มใหญ่ขึ้นเล็กน้อย */
+}
+
+.btn-primary {
+    background-color: #2575fc; /* Blue */
+    color: white;
+}
+.btn-primary:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Gray */
+    color: white;
+}
+.btn-secondary:hover:not(:disabled) {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+.btn-danger:hover:not(:disabled) {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Message Box */
+#messageBox {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    display: none; /* Hidden by default */
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.message-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Adjust question text size and width */
+#questionText {
+    font-size: 1.8em; /* ลดขนาดฟอนต์ของคำถามให้เล็กลง */
+    font-weight: bold;
+    margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่างเล็กน้อย */
+    max-width: 80%; /* จำกัดความกว้างของข้อความคำถาม */
+    margin-left: auto; /* จัดกึ่งกลางข้อความคำถาม */
+    margin-right: auto; /* จัดกึ่งกลางข้อความคำถาม */
 }
 
 
@@ -490,20 +597,40 @@ body.dark-theme #questionCounter {
         margin: 10px;
     }
     h1 {
-        font-size: 2em;
+        font-size: 2.5em; /* ปรับขนาด h1 สำหรับมือถือ */
     }
     h2 {
-        font-size: 1.5em;
+        font-size: 2em; /* ปรับขนาดฟอนต์ h2 สำหรับมือถือ */
+    }
+    p {
+        font-size: 1.5em; /* ปรับขนาดฟอนต์ p สำหรับมือถือ */
     }
     button, .option-button {
-        font-size: 1em;
+        font-size: 1.1em; /* ปรับขนาดฟอนต์ปุ่มสำหรับมือถือ */
         padding: 12px 25px;
     }
     #questionCounter { /* Adjust position for smaller screens */
         top: 10px;
         right: 10px;
-        font-size: 0.8em;
+        font-size: 0.9em;
         padding: 3px 8px;
+    }
+    .btn {
+        padding: 10px 15px;
+        font-size: 1.1em; /* ปรับขนาดฟอนต์ปุ่มนำทางสำหรับมือถือ */
+        max-width: none; /* Allow full width on small screens */
+    }
+    .navigation-buttons, .action-buttons {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+        gap: 10px;
+    }
+    #questionText {
+        font-size: 1.6em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือ */
+        max-width: 90%; /* ปรับความกว้างของข้อความคำถามบนมือถือ */
+    }
+    #quizSelectionButtons {
+        grid-template-columns: 1fr; /* ให้เป็น 1 คอลัมน์บนมือถือเพื่อความอ่านง่าย */
+        max-width: 350px; /* จำกัดความกว้างเพื่อให้ปุ่มไม่กว้างเกินไป */
     }
 }
 
@@ -512,13 +639,20 @@ body.dark-theme #questionCounter {
         padding: 15px;
     }
     h1 {
-        font-size: 1.8em;
+        font-size: 2.2em;
     }
     h2 {
-        font-size: 1.3em;
+        font-size: 1.8em; /* ปรับขนาดฟอนต์ h2 สำหรับมือถือขนาดเล็ก */
+    }
+    p {
+        font-size: 1.4em; /* ปรับขนาดฟอนต์ p สำหรับมือถือขนาดเล็ก */
     }
     button, .option-button {
-        font-size: 0.9em;
+        font-size: 1em;
         padding: 10px 20px;
+    }
+    #questionText {
+        font-size: 1.5em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือขนาดเล็ก */
+        max-width: 95%; /* ปรับความกว้างของข้อความคำถามบนมือถือขนาดเล็ก */
     }
 }
