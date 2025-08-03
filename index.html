@@ -25,6 +25,12 @@
         <a href="#" id="sidebarSelectQuizBtn"><i class="fas fa-book"></i> เลือก พ.ร.บ.</a>
         <a href="#"><i class="fas fa-question-circle"></i> เกี่ยวกับแอป</a>
         <a href="#" id="sidebarLogoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+        <!-- New: Text size controls in sidebar -->
+        <div class="sidebar-text-size-controls">
+            <span class="text-size-label">ขนาดตัวอักษรคำถาม:</span>
+            <button id="textDecreaseBtn" class="text-size-btn"><i class="fas fa-minus"></i></button>
+            <button id="textIncreaseBtn" class="text-size-btn"><i class="fas fa-plus"></i></button>
+        </div>
     </div>
 
     <!-- Main Content (เนื้อหาหลักของแอป) -->
@@ -33,6 +39,8 @@
         <span class="openbtn">&#9776;</span>
         <!-- ปุ่มเปลี่ยนธีม -->
         <button id="themeToggleButton" class="theme-toggle-btn"><i class="fas fa-moon"></i></button>
+        <!-- ตัวนับข้อสอบที่ย้ายมาอยู่ด้านนอก -->
+        <div id="questionCounter" class="question-counter-fixed"></div>
 
         <!-- หน้าจอหลัก: เปลี่ยนเป็นหน้าจอสำหรับเลือก พ.ร.บ. ทันที -->
         <div class="container" id="homeScreen">
@@ -52,7 +60,7 @@
         </div>
 
         <div class="container" id="quizScreen" style="display: none;">
-            <div id="questionCounter"></div> <!-- เพิ่มตัวนับข้อสอบที่นี่ -->
+            <!-- ตัวนับข้อสอบถูกย้ายออกไปแล้ว -->
             <h2 id="questionText"></h2>
             <div id="optionsContainer">
                 <!-- ตัวเลือกจะถูกสร้างด้วย JavaScript -->

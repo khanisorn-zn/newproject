@@ -12,6 +12,12 @@ let score = 0;
 let userAnswers = [];
 let selectedQuizType = null; // เก็บประเภทข้อสอบที่กำลังทำอยู่
 
+// ตัวแปรสำหรับควบคุมขนาดตัวอักษรของคำถาม
+const MIN_FONT_SIZE_EM = 1.0; // ขนาดต่ำสุด (em)
+const MAX_FONT_SIZE_EM = 2.5; // ขนาดสูงสุด (em)
+const FONT_SIZE_STEP_EM = 0.1; // ขั้นตอนการเพิ่ม/ลด (em)
+let currentQuestionFontSize = 1.5; // ขนาดเริ่มต้น (ตรงกับค่าใน CSS)
+
 // รับ Element ของ DOM ที่จำเป็น
 const questionCounterElement = document.getElementById('questionCounter');
 const questionTextElement = document.getElementById('questionText');
@@ -24,16 +30,20 @@ const nextBtn = document.getElementById('nextBtn');
 const resetQuizBtn = document.getElementById('resetQuizBtn'); // เปลี่ยนชื่อจาก resetBtn
 const messageBox = document.getElementById('messageBox'); // กล่องข้อความแจ้งเตือน
 
+// New: Get text size buttons
+const textIncreaseBtn = document.getElementById('textIncreaseBtn');
+const textDecreaseBtn = document.getElementById('textDecreaseBtn');
+
 // --- ฟังก์ชันช่วยเหลือ ---
 
 /**
  * แสดงข้อความในกล่องข้อความแจ้งเตือน
  * @param {string} message - ข้อความที่ต้องการแสดง
- * @param {'success' | 'error'} type - ประเภทของข้อความ ('success' หรือ 'error') สำหรับการจัดสไตล์
+ * @param {'success' | 'error' | 'info'} type - ประเภทของข้อความ ('success', 'error' หรือ 'info') สำหรับการจัดสไตล์
  */
 function showMessage(message, type) {
     messageBox.textContent = message;
-    messageBox.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'} block`;
+    messageBox.className = `message-box ${type === 'success' ? 'message-success' : type === 'error' ? 'message-error' : 'message-info'} block`;
     // ซ่อนข้อความหลังจาก 3 วินาที
     setTimeout(() => {
         hideMessage();
@@ -132,7 +142,7 @@ async function loadQuestions(quizType) {
             ]);
             
             // รวมคำถามทั้งหมดเข้าด้วยกัน
-            questions = [
+            let allQuestions = [
                 ...civilServantModule.civilServantActQuestions,
                 ...pdpaModule.pdpaActQuestions,
                 ...moeModule.moeActQuestions,
@@ -143,7 +153,11 @@ async function loadQuestions(quizType) {
             ];
             
             // สุ่มคำถามทั้งหมด
-            questions = shuffleArray(questions);
+            allQuestions = shuffleArray(allQuestions);
+
+            // จำกัดจำนวนข้อเป็น 100 ข้อ
+            const maxQuestions = 100;
+            questions = allQuestions.slice(0, Math.min(allQuestions.length, maxQuestions));
 
         } else {
             // โหลดคำถามตามประเภทที่เลือก และสุ่มเฉพาะใน พ.ร.บ. นั้นๆ
@@ -191,7 +205,7 @@ async function loadQuestions(quizType) {
         // ซ่อนหน้าจอเลือก พ.ร.บ. (homeScreen) และแสดงหน้าจอทำข้อสอบ (quizScreen) ทันที
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('quizScreen').style.display = 'block';
-        questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบ
+        questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบที่ย้ายมาอยู่ด้านนอก
         
         // บันทึกความคืบหน้าเริ่มต้น
         saveProgress();
@@ -219,6 +233,7 @@ function displayQuestion() {
         nextBtn.disabled = true;
         resetQuizBtn.disabled = true;
         questionCounterElement.innerText = '0/0';
+        questionCounterElement.style.display = 'none'; // ซ่อนตัวนับเมื่อไม่มีคำถาม
         feedbackContainer.style.display = 'none';
         return;
     }
@@ -232,9 +247,12 @@ function displayQuestion() {
 
     const questionData = questions[currentQuestionIndex];
     const cleanQuestionText = questionData.question.replace(/^\d+\.\s*/, '');
-    questionTextElement.innerText = `ข้อที่ ${currentQuestionIndex + 1}. ${cleanQuestionText}`;
+    questionTextElement.innerText = `${cleanQuestionText}`; // ลบ "ข้อที่ X." ออกจากคำถามหลัก
     
-    // อัปเดตตัวนับข้อสอบ
+    // Apply current font size
+    questionTextElement.style.fontSize = `${currentQuestionFontSize}em`;
+
+    // อัปเดตตัวนับข้อสอบที่ย้ายไปอยู่ด้านนอก
     questionCounterElement.innerText = `ข้อที่ ${currentQuestionIndex + 1} จาก ${questions.length}`;
 
     optionsContainer.innerHTML = ''; // ล้างตัวเลือกเดิม
@@ -271,7 +289,7 @@ function displayQuestion() {
             btn.disabled = true; // ปิดการใช้งานปุ่มเมื่อตอบแล้ว
         });
 
-        feedbackTextElement.innerText = answeredIndex === questionData.answer ? "ถูกต้อง!" : `ผิด! คำตอบที่ถูกต้องคือ ${questionData.options[questionData.answer]}`;
+        feedbackTextElement.innerText = answeredIndex === questionData.answer ? "ถูกต้อง!" : `ผิด! คำตอบที่ถูกต้องคือ ${questions[currentQuestionIndex].options[correctAnswerIndex]}`;
         feedbackTextElement.classList.toggle('correct-feedback', answeredIndex === questionData.answer);
         feedbackTextElement.classList.toggle('wrong-feedback', answeredIndex !== questionData.answer);
         explanationTextElement.innerText = questionData.reason;
@@ -368,12 +386,12 @@ function resetQuiz(showMsg = true) {
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
         document.getElementById('homeScreen').style.display = 'block';
-        questionCounterElement.style.display = 'none';
+        questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
+        questions = []; // เคลียร์คำถามที่โหลดอยู่
 
         if (showMsg) {
             showMessage('รีเซ็ตข้อสอบเรียบร้อยแล้ว!', 'success');
         }
-        questions = []; // เคลียร์คำถามที่โหลดอยู่
     } catch (e) {
         console.error('Failed to reset quiz:', e);
         showMessage('ไม่สามารถรีเซ็ตข้อสอบได้', 'error');
@@ -428,6 +446,23 @@ function applyTheme(theme) {
     }
 }
 
+/**
+ * ปรับขนาดตัวอักษรของคำถาม
+ * @param {number} step - ค่าที่ต้องการเพิ่ม/ลด (เช่น 0.1 หรือ -0.1)
+ */
+function adjustQuestionFontSize(step) {
+    let newSize = parseFloat((currentQuestionFontSize + step).toFixed(2)); // ใช้ toFixed(2) เพื่อหลีกเลี่ยงปัญหา floating point
+    if (newSize < MIN_FONT_SIZE_EM) {
+        newSize = MIN_FONT_SIZE_EM;
+        showMessage('ขนาดตัวอักษรเล็กที่สุดแล้ว', 'info');
+    } else if (newSize > MAX_FONT_SIZE_EM) {
+        newSize = MAX_FONT_SIZE_EM;
+        showMessage('ขนาดตัวอักษรใหญ่ที่สุดแล้ว', 'info');
+    }
+    currentQuestionFontSize = newSize;
+    questionTextElement.style.fontSize = `${currentQuestionFontSize}em`;
+    localStorage.setItem('questionFontSize', currentQuestionFontSize.toString()); // Save to localStorage
+}
 
 // --- Event Listeners ---
 
@@ -441,6 +476,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // ค่าเริ่มต้นเป็น light theme หากไม่มีการบันทึกไว้
         applyTheme('light');
     }
+
+    // Load saved font size for question text
+    const savedFontSize = localStorage.getItem('questionFontSize');
+    if (savedFontSize) {
+        currentQuestionFontSize = parseFloat(savedFontSize);
+    }
+    questionTextElement.style.fontSize = `${currentQuestionFontSize}em`; // Apply initial font size
 
     // ปุ่ม Hamburger icon สำหรับเปิด Sidebar
     document.querySelector('.openbtn').addEventListener('click', openNav);
@@ -538,6 +580,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         closeNav();
     });
 
+    // New: Event Listeners for text size buttons
+    textIncreaseBtn.addEventListener('click', () => adjustQuestionFontSize(FONT_SIZE_STEP_EM));
+    textDecreaseBtn.addEventListener('click', () => adjustQuestionFontSize(-FONT_SIZE_STEP_EM));
+
     // เพิ่ม Event Listener สำหรับการปรับขนาดหน้าจอ เพื่อจัดการปุ่ม openbtn
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
@@ -606,7 +652,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // หากโหลดคำถามสำเร็จ ให้แสดงหน้าจอทำข้อสอบ
             document.getElementById('homeScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
-            questionCounterElement.style.display = 'block';
+            questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบ
             displayQuestion(); // แสดงคำถามที่บันทึกไว้
         } catch (error) {
             console.error("เกิดข้อผิดพลาดในการโหลดโมดูลคำถามจาก localStorage:", error);
@@ -614,7 +660,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             resetQuiz(false); // หากมีข้อผิดพลาดในการโหลด ให้รีเซ็ต
         }
     } else {
-        // หากไม่มีความคืบหน้า ให้แสดงหน้าจอเลือก พ.ร.บ.
+        // หากไม่มีความคืบหน้า ให้แสดงหน้าจอเลือก พ.ร.B.
         document.getElementById('homeScreen').style.display = 'block';
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';

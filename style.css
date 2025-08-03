@@ -31,6 +31,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* จัดเรียงข้อความชิดซ้าย */
+    justify-content: space-between; /* จัดเนื้อหาให้กระจายเต็มความสูง */
 }
 
 .sidebar a {
@@ -84,6 +85,45 @@ body {
     margin: 0;
     font-size: 1.5em;
 }
+
+/* New: Text size controls container in sidebar */
+.sidebar-text-size-controls {
+    width: 100%;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end; /* จัดปุ่มไปทางขวา */
+    align-items: center;
+    gap: 10px;
+    margin-top: auto; /* Push to the bottom */
+    border-top: 1px solid #616161;
+    padding-bottom: 20px; /* เพิ่ม padding ด้านล่าง */
+}
+
+.sidebar-text-size-controls .text-size-label {
+    color: #f1f1f1;
+    font-size: 0.9em;
+    margin-right: auto; /* Push label to the left */
+}
+
+.sidebar-text-size-controls .text-size-btn {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: auto; /* Override general button width */
+    margin: 0; /* Override general button margin */
+}
+
+.sidebar-text-size-controls .text-size-btn:hover {
+    background-color: #777;
+}
+
 
 /* สไตล์สำหรับเนื้อหาหลัก */
 #main {
@@ -144,6 +184,13 @@ body {
     justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
     width: 100%; /* ให้ homeScreen เต็มความกว้างของ main */
 }
+
+/* Adjust quizScreen container width */
+#quizScreen.container {
+    max-width: 550px; /* ปรับลดขนาดกล่องคำถามให้เล็กลงอีก */
+    padding: 25px; /* ลด padding เพื่อให้เนื้อหามีพื้นที่มากขึ้น */
+}
+
 
 h1 {
     color: #333; /* สีข้อความเข้ม */
@@ -208,7 +255,7 @@ button:active {
     color: #333;
     border: 1px solid #ddd;
     padding: 15px;
-    font-size: 1.2em; /* เพิ่มขนาดฟอนต์ตัวเลือก */
+    font-size: 1em; /* ลดขนาดฟอนต์ตัวเลือกเล็กน้อย */
     cursor: pointer;
     border-radius: 8px;
     width: 100%;
@@ -452,26 +499,31 @@ body.dark-theme .theme-toggle-btn:hover {
     background-color: #444;
 }
 
-/* Question Counter Style */
-#questionCounter {
-    position: absolute; /* ตำแหน่งสัมบูรณ์ภายใน .container */
-    top: 15px; /* ระยะห่างจากด้านบน */
-    right: 15px; /* ระยะห่างจากด้านขวา */
-    font-size: 1em; /* เพิ่มขนาดฟอนต์ counter */
-    color: #666; /* สีข้อความ */
-    background-color: #f0f0f0; /* พื้นหลังเล็กน้อย */
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 10; /* ให้แสดงอยู่ด้านบน */
+/* New: Question Counter Fixed Style */
+.question-counter-fixed {
+    position: fixed;
+    top: 65px; /* Adjust position below theme toggle button */
+    right: 20px;
+    font-size: 1em;
+    color: #4a4a4a; /* Darker text for contrast */
+    background-color: #fff; /* White background */
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1001; /* Ensure it's above other content */
+    display: none; /* Hidden by default, shown when quiz starts */
+    font-weight: bold;
+    min-width: 100px; /* Ensure enough width for text */
+    text-align: center;
 }
 
-/* Dark theme for question counter */
-body.dark-theme #questionCounter {
-    background-color: #444;
-    color: #ccc;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+/* Dark theme for fixed question counter */
+body.dark-theme .question-counter-fixed {
+    background-color: #34495e; /* Darker background */
+    color: #f0f0f0; /* Lighter text */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
+
 
 /* New styles for navigation and action buttons */
 .navigation-buttons, .action-buttons {
@@ -555,10 +607,10 @@ body.dark-theme #questionCounter {
 
 /* Adjust question text size and width */
 #questionText {
-    font-size: 1.8em; /* ลดขนาดฟอนต์ของคำถามให้เล็กลง */
+    font-size: 1.5em; /* ลดขนาดฟอนต์ของคำถามให้เล็กลงอีก */
     font-weight: bold;
-    margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่างเล็กน้อย */
-    max-width: 80%; /* จำกัดความกว้างของข้อความคำถาม */
+    margin-bottom: 18px; /* เพิ่มระยะห่างด้านล่างเล็กน้อย */
+    max-width: 90%; /* จำกัดความกว้างของข้อความคำถามให้พอดีกับกล่อง */
     margin-left: auto; /* จัดกึ่งกลางข้อความคำถาม */
     margin-right: auto; /* จัดกึ่งกลางข้อความคำถาม */
 }
@@ -589,12 +641,24 @@ body.dark-theme #questionCounter {
         top: 10px;
         right: 10px;
     }
+    .question-counter-fixed { /* Adjust position for smaller screens */
+        top: 55px; /* Adjust position below theme toggle button */
+        right: 10px;
+        font-size: 0.9em;
+        padding: 5px 10px;
+        min-width: 80px;
+    }
     #main {
         padding: 10px;
     }
     .container {
         padding: 25px;
         margin: 10px;
+    }
+    /* Adjust quizScreen container width for smaller screens */
+    #quizScreen.container {
+        max-width: 90%; /* ให้เต็มความกว้างมากขึ้นบนมือถือ */
+        padding: 18px;
     }
     h1 {
         font-size: 2.5em; /* ปรับขนาด h1 สำหรับมือถือ */
@@ -609,12 +673,6 @@ body.dark-theme #questionCounter {
         font-size: 1.1em; /* ปรับขนาดฟอนต์ปุ่มสำหรับมือถือ */
         padding: 12px 25px;
     }
-    #questionCounter { /* Adjust position for smaller screens */
-        top: 10px;
-        right: 10px;
-        font-size: 0.9em;
-        padding: 3px 8px;
-    }
     .btn {
         padding: 10px 15px;
         font-size: 1.1em; /* ปรับขนาดฟอนต์ปุ่มนำทางสำหรับมือถือ */
@@ -625,7 +683,7 @@ body.dark-theme #questionCounter {
         gap: 10px;
     }
     #questionText {
-        font-size: 1.6em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือ */
+        font-size: 1.4em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือ */
         max-width: 90%; /* ปรับความกว้างของข้อความคำถามบนมือถือ */
     }
     #quizSelectionButtons {
@@ -637,6 +695,11 @@ body.dark-theme #questionCounter {
 @media (max-width: 480px) {
     .container {
         padding: 15px;
+    }
+    /* Adjust quizScreen container width for very small screens */
+    #quizScreen.container {
+        max-width: 95%; /* ให้เต็มความกว้างบนมือถือขนาดเล็กมาก */
+        padding: 12px;
     }
     h1 {
         font-size: 2.2em;
@@ -652,7 +715,7 @@ body.dark-theme #questionCounter {
         padding: 10px 20px;
     }
     #questionText {
-        font-size: 1.5em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือขนาดเล็ก */
+        font-size: 1.3em; /* ลดขนาดฟอนต์คำถามสำหรับมือถือขนาดเล็กอีก */
         max-width: 95%; /* ปรับความกว้างของข้อความคำถามบนมือถือขนาดเล็ก */
     }
 }
