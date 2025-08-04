@@ -524,6 +524,31 @@ body.dark-theme .question-counter-fixed {
     box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
 
+/* New: Fixed score display style */
+.fixed-score-display {
+    position: fixed;
+    bottom: 60px; /* Position above the reset button */
+    right: 20px;
+    font-size: 1em;
+    color: #4a4a4a; /* Darker text for contrast */
+    background-color: #fff; /* White background */
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000; /* Ensure it's above other content but below question counter */
+    display: none; /* Hidden by default */
+    font-weight: bold;
+    min-width: 100px; /* Ensure enough width for text */
+    text-align: center;
+}
+
+/* Dark theme for fixed score display */
+body.dark-theme .fixed-score-display {
+    background-color: #34495e; /* Darker background */
+    color: #f0f0f0; /* Lighter text */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
 
 /* ปุ่มรีเซ็ตข้อสอบที่ย้ายมาอยู่มุมขวาล่าง */
 .reset-quiz-fixed-btn {
@@ -666,6 +691,13 @@ body.dark-theme .reset-quiz-fixed-btn {
     }
     .question-counter-fixed { /* Adjust position for smaller screens */
         top: 55px; /* Adjust position below theme toggle button */
+        right: 10px;
+        font-size: 0.9em;
+        padding: 5px 10px;
+        min-width: 80px;
+    }
+    .fixed-score-display { /* Adjust position for smaller screens */
+        bottom: 55px; /* Position above the reset button */
         right: 10px;
         font-size: 0.9em;
         padding: 5px 10px;

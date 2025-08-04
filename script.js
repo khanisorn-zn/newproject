@@ -29,6 +29,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const resetQuizBtn = document.getElementById('resetQuizBtn'); // เปลี่ยนชื่อจาก resetBtn
 const messageBox = document.getElementById('messageBox'); // กล่องข้อความแจ้งเตือน
+const fixedScoreDisplayElement = document.getElementById('fixedScoreDisplay'); // New: Fixed score display element
 
 // New: Get text size buttons
 const textIncreaseBtn = document.getElementById('textIncreaseBtn');
@@ -160,7 +161,7 @@ async function loadQuestions(quizType) {
             questions = allQuestions.slice(0, Math.min(allQuestions.length, maxQuestions));
 
         } else {
-            // โหลดคำถามตามประเภทที่เลือก และสุ่มเฉพาะใน พ.ร.บ. นั้นๆ
+            // โหลดคำถามตามประเภทที่เลือก (ไม่สุ่มลำดับคำถามสำหรับ พ.ร.บ. เดี่ยว)
             switch (quizType) {
                 case 'civil_servant_act':
                     module = await import('./data/civil_servant_act.js');
@@ -196,8 +197,8 @@ async function loadQuestions(quizType) {
                     showMessage('ไม่พบชุดข้อสอบที่เลือก', 'error');
                     return;
             }
-            // สุ่มคำถามสำหรับ พ.ร.บ. ที่เลือก
-            questions = shuffleArray(questions);
+            // ไม่มีการสุ่มคำถามสำหรับ พ.ร.บ. เดี่ยว
+            // questions = shuffleArray(questions); // บรรทัดนี้ถูกคอมเมนต์ออก
         }
 
         console.log(`โหลดคำถามสำหรับ ${quizType} สำเร็จ! มี ${questions.length} ข้อ`);
@@ -206,12 +207,14 @@ async function loadQuestions(quizType) {
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('quizScreen').style.display = 'block';
         questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบที่ย้ายมาอยู่ด้านนอก
+        fixedScoreDisplayElement.style.display = 'block'; // แสดงคะแนนที่ย้ายมาอยู่ด้านนอก
         resetQuizBtn.style.display = 'block'; // แสดงปุ่มรีเซ็ตเมื่อเริ่มทำข้อสอบ
         
         // บันทึกความคืบหน้าเริ่มต้น
         saveProgress();
         // แสดงคำถามข้อแรก (หรือข้อที่โหลดมา)
         displayQuestion();
+        updateFixedScoreDisplay(); // อัปเดตคะแนนเริ่มต้น
         
         closeNav(); // ปิด sidebar หลังจากเลือก พ.ร.บ.
     } catch (error) {
@@ -235,6 +238,7 @@ function displayQuestion() {
         resetQuizBtn.disabled = true;
         questionCounterElement.innerText = '0/0';
         questionCounterElement.style.display = 'none'; // ซ่อนตัวนับเมื่อไม่มีคำถาม
+        fixedScoreDisplayElement.style.display = 'none'; // ซ่อนคะแนนเมื่อไม่มีคำถาม
         feedbackContainer.style.display = 'none';
         return;
     }
@@ -255,6 +259,7 @@ function displayQuestion() {
 
     // อัปเดตตัวนับข้อสอบที่ย้ายไปอยู่ด้านนอก
     questionCounterElement.innerText = `ข้อที่ ${currentQuestionIndex + 1} จาก ${questions.length}`;
+    updateFixedScoreDisplay(); // อัปเดตคะแนนเมื่อเปลี่ยนข้อ
 
     optionsContainer.innerHTML = ''; // ล้างตัวเลือกเดิม
     feedbackContainer.style.display = 'none'; // ซ่อน feedback ก่อน
@@ -290,7 +295,7 @@ function displayQuestion() {
             btn.disabled = true; // ปิดการใช้งานปุ่มเมื่อตอบแล้ว
         });
 
-        feedbackTextElement.innerText = answeredIndex === questionData.answer ? "ถูกต้อง!" : `ผิด! คำตอบที่ถูกต้องคือ ${questions[currentQuestionIndex].options[correctAnswerIndex]}`;
+        feedbackTextElement.innerText = answeredIndex === questionData.answer ? "ถูกต้อง!" : `ผิด! คำตอบที่ถูกต้องคือ ${questionData.options[questionData.answer]}`;
         feedbackTextElement.classList.toggle('correct-feedback', answeredIndex === questionData.answer);
         feedbackTextElement.classList.toggle('wrong-feedback', answeredIndex !== questionData.answer);
         explanationTextElement.innerText = questionData.reason;
@@ -342,6 +347,7 @@ function checkAnswer(selectedIndex, correctAnswerIndex, reason, clickedButton) {
 
     explanationTextElement.innerText = reason;
     feedbackContainer.style.display = 'block';
+    updateFixedScoreDisplay(); // อัปเดตคะแนนหลังจากตอบคำถาม
 }
 
 /**
@@ -388,12 +394,14 @@ function resetQuiz(showMsg = true) {
         document.getElementById('resultScreen').style.display = 'none';
         document.getElementById('homeScreen').style.display = 'block';
         questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
+        fixedScoreDisplayElement.style.display = 'none'; // ซ่อนคะแนน
         resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
         questions = []; // เคลียร์คำถามที่โหลดอยู่
 
         if (showMsg) {
             showMessage('รีเซ็ตข้อสอบเรียบร้อยแล้ว!', 'success');
         }
+        updateFixedScoreDisplay(); // อัปเดตคะแนนเป็น 0/0 หลังจากรีเซ็ต
     } catch (e) {
         console.error('Failed to reset quiz:', e);
         showMessage('ไม่สามารถรีเซ็ตข้อสอบได้', 'error');
@@ -407,11 +415,25 @@ function displayResult() {
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('resultScreen').style.display = 'block';
     questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบเมื่อแสดงผลลัพธ์
+    fixedScoreDisplayElement.style.display = 'none'; // ซ่อนคะแนนเมื่อแสดงผลลัพธ์
     resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ตเมื่อแสดงผลลัพธ์
     document.getElementById('scoreDisplay').innerText = `คุณได้คะแนน ${score} จาก ${questions.length} ข้อ`;
     // เมื่อจบข้อสอบ ให้ล้างความคืบหน้า
     resetQuiz(false); // ไม่ต้องแสดงข้อความรีเซ็ต
 }
+
+/**
+ * อัปเดตการแสดงคะแนนแบบ Fixed ที่มุมขวาล่าง
+ */
+function updateFixedScoreDisplay() {
+    if (questions.length > 0) {
+        fixedScoreDisplayElement.innerText = `คะแนน: ${score} / ${questions.length}`;
+        fixedScoreDisplayElement.style.display = 'block';
+    } else {
+        fixedScoreDisplayElement.style.display = 'none';
+    }
+}
+
 
 // --- ฟังก์ชันสำหรับ Sidebar ---
 function openNav() {
@@ -580,6 +602,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
         questionCounterElement.style.display = 'none'; // ซ่อนตัวนับข้อสอบ
+        fixedScoreDisplayElement.style.display = 'none'; // ซ่อนคะแนน
         resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
         closeNav();
     });
@@ -601,8 +624,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ซ่อนตัวนับข้อสอบเมื่อโหลดหน้าครั้งแรก (เพราะยังไม่อยู่ในหน้า quizScreen)
+    // ซ่อนตัวนับข้อสอบและคะแนนเมื่อโหลดหน้าครั้งแรก (เพราะยังไม่อยู่ในหน้า quizScreen)
     questionCounterElement.style.display = 'none';
+    fixedScoreDisplayElement.style.display = 'none';
     resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ตเมื่อโหลดหน้าครั้งแรก
 
     // โหลดความคืบหน้าเมื่อ DOM โหลดเสร็จ
@@ -658,8 +682,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('homeScreen').style.display = 'none';
             document.getElementById('quizScreen').style.display = 'block';
             questionCounterElement.style.display = 'block'; // แสดงตัวนับข้อสอบ
+            fixedScoreDisplayElement.style.display = 'block'; // แสดงคะแนน
             resetQuizBtn.style.display = 'block'; // แสดงปุ่มรีเซ็ตเมื่อโหลดข้อสอบ
             displayQuestion(); // แสดงคำถามที่บันทึกไว้
+            updateFixedScoreDisplay(); // อัปเดตคะแนนเมื่อโหลดความคืบหน้า
         } catch (error) {
             console.error("เกิดข้อผิดพลาดในการโหลดโมดูลคำถามจาก localStorage:", error);
             showMessage('ไม่สามารถโหลดชุดข้อสอบที่บันทึกไว้ได้', 'error');
@@ -671,6 +697,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('quizScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'none';
         questionCounterElement.style.display = 'none';
+        fixedScoreDisplayElement.style.display = 'none';
         resetQuizBtn.style.display = 'none'; // ซ่อนปุ่มรีเซ็ต
     }
 });
